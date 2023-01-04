@@ -90,6 +90,7 @@ function App() {
     setTimeout(() => setModalOpen(true), 1000);
     setGameOver(true);
   }
+  
 
   return (
     <div className="App" onKeyDown={handleKeyDown} tabIndex={0}>
