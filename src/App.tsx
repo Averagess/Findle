@@ -98,6 +98,7 @@ function App() {
       <div className="mainContainer">
         {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
         <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1>
+        <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1>
         {PastGuessElements}
         {PastGuessElements.length < 5 && <InputGrid value={input} />}
         {EmptyGuessElements}
