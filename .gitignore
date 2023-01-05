@@ -9,7 +9,7 @@ lerna-debug.log*
 
 node_modules
 .yarn/
-
+dist/
 # Editor directories and files
 .vscode/*
 .vscode/
