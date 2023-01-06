@@ -9,6 +9,7 @@ import words from "./assets/words";
 import "./styles.css";
 import NavBar from "./components/NavBar";
 import Keyboard from "./components/Keyboard";
+import Footer from "./components/Footer";
 
 function App() {
   const [currentWord, setCurrentWord] = useState<string | null>(null);
@@ -80,15 +81,19 @@ function App() {
       : [];
 
   if (!gameOver && !modalOpen && PastGuessElements.length === 5) {
-    setTimeout(() => setModalOpen(true), 1000);
-    setGameOver(true);
+    setTimeout(() => {
+      setModalOpen(true)
+      setGameOver(true);
+    }, 3000);
   } else if (
     !gameOver &&
     !modalOpen &&
     guesses[guesses.length - 1] === currentWord
   ) {
-    setTimeout(() => setModalOpen(true), 1000);
-    setGameOver(true);
+    setTimeout(() => {
+      setModalOpen(true)
+      setGameOver(true);
+    }, 3000);
   }
 
 
@@ -97,7 +102,6 @@ function App() {
       <NavBar />
       <div className="mainContainer">
         {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
-        <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1>
         {PastGuessElements}
         {PastGuessElements.length < 5 && <InputGrid value={input} />}
         {EmptyGuessElements}
@@ -106,7 +110,7 @@ function App() {
           guesses={guesses}
           changeInput={changeInput}
         />
-        <button onClick={() => setModalOpen(true)}>show modal</button>
+        {gameOver && <button style={{marginTop: "15px"}} className="general-button" onClick={() => setModalOpen(true)}>show results</button>}
       </div>
       {modalOpen && (
         <Popup
@@ -116,6 +120,7 @@ function App() {
           resetGame={setupGame}
         />
       )}
+      <Footer />
     </div>
   );
 }
