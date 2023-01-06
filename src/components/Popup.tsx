@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import CloseButton from "./CloseButton";
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -25,7 +26,7 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
   });
 
   const boardToClipboard = () => {
-    const boardString = guesses.map((guess, index) => {
+    const boardString = guesses.map((guess) => {
       const roundString = guess.split("").map((char, index) => {
         if (char === correctWord[index]) {
           return "🟩";
@@ -35,13 +36,21 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
           return "⬛";
         }
       });
-      return roundString.join("") + "\n";
+      return roundString.join("");
     });
-    navigator.clipboard.writeText(
-        `Daily Findle\n${new Date(Date.now()).toLocaleDateString()}\n\n${boardString.join("")}`
-      )
+    const resultStrings: string[] = [
+      "Daily Findle",
+      new Date(Date.now()).toLocaleDateString(),
+      "",
+      ...boardString,
+    ];
+
+    console.log(resultStrings.join("\n"));
+    navigator.clipboard
+      .writeText(resultStrings.join("\n"))
       .then(() => {
-        alert("Daily Findle copied to your clipboard!");
+        // alert("Daily Findle copied to your clipboard!");
+        setCopiedToClipboard(true);
         console.log("copied to clipboard");
       })
       .catch((err) => console.log("error copying to clipboard", err));
@@ -75,7 +84,11 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
           position: "relative",
         }}
       >
-        {guesses[guesses.length - 1] === correctWord ? <h1>Nice one!</h1>:<h1>Oh well!</h1>}
+        {guesses[guesses.length - 1] === correctWord ? (
+          <h1>Nice one!</h1>
+        ) : (
+          <h1>Oh well!</h1>
+        )}
         <CloseButton
           style={{
             position: "absolute",
@@ -90,8 +103,20 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
           <p>u got it right after {guesses.length} guesses!</p>
         )}
         <div style={{ display: "flex", gap: 25 }}>
-          <button className="general-button" onClick={resetGame}>Play again</button>
-          <button className="general-button" title="copy to clipboard" onClick={boardToClipboard}>or share!</button>
+          <button className="general-button" onClick={resetGame}>
+            Play again
+          </button>
+          <button
+            className="general-button"
+            title="copy to clipboard"
+            onClick={boardToClipboard}
+            style={{
+              transition: "all 0.5s cubic-bezier(0.48, -0.27, 0.6, 1.15) 0s",
+              backgroundColor: copiedToClipboard ? "#43b648" : "",
+            }}
+          >
+            {copiedToClipboard ? "copied!" : "copy to clipboard"}
+          </button>
         </div>
       </div>
     </div>
