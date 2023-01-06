@@ -154,9 +154,9 @@ const Keyboard = ({ guesses, correctString, changeInput }: Props) => {
 
   return (
     <div className="keyboard">
-      <div className="keyboardRow">{KeyRow1}</div>
-      <div className="keyboardRow">{KeyRow2}</div>
-      <div className="keyboardRow">{KeyRow3}</div>
+      <div className="keyboard-row">{KeyRow1}</div>
+      <div className="keyboard-row">{KeyRow2}</div>
+      <div className="keyboard-row">{KeyRow3}</div>
     </div>
   );
 };
