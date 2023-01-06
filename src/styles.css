@@ -32,7 +32,8 @@ body, #root {
   align-items: center;
   justify-content: center;
   min-width: fit-content;
-  width: 45vw;
+  width: 60vw;
+  height: 60vh;
   margin-left: auto;
   margin-right: auto;
   background-color: #1a1919;
@@ -170,6 +171,10 @@ body, #root {
   animation: reveal-default 0.5s ease-in both;
 }
 
+.horizontal-shake {
+  animation: horizontal-shake 0.5s ease-in both;
+}
+
 .footer-container {
   position: fixed;
   bottom: 0;
@@ -232,4 +237,12 @@ body, #root {
             transform: rotateY(360deg);
             background-color: #242424;
   }
+}
+
+@keyframes horizontal-shake {
+  0% { transform: translateX(0) }
+  25% { transform: translateX(5px) }
+  50% { transform: translateX(-5px) }
+  75% { transform: translateX(5px) }
+  100% { transform: translateX(0) }
 }
