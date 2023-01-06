@@ -1,17 +1,22 @@
 import CharContainer from "./CharContainer";
 
-const InputGrid = ({ value }: { value: string }) => {
-  const Boxes: JSX.Element[] = new Array(5)
-    .fill(null)
-    .map((_, index) =>
-      value[index] ? (
-        <CharContainer key={index} char={value[index]} type="default" />
-      ) : (
-        <CharContainer key={index} type="default" />
-      )
-    );
+interface Props {
+  value: string;
+  shouldAnimateShake: boolean;
+}
 
-  return <div className="inputContainer">{Boxes}</div>;
+const InputGrid = ({ value, shouldAnimateShake }: Props) => {
+
+  const Boxes: JSX.Element[] = new Array(5).fill(null).map((_, index) => {
+    if (value[index]) return (<CharContainer key={index} char={value[index]} type="default" />)
+    else return (<CharContainer key={index} type="default" />)
+  })
+
+  const className = shouldAnimateShake
+    ? "inputContainer horizontal-shake"
+    : "inputContainer";
+
+  return <div className={className}>{Boxes}</div>;
 };
 
 export default InputGrid;
