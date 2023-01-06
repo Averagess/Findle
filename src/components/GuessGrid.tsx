@@ -22,7 +22,7 @@ const GuessGrid = ({ guessString, correctString }: Props) => {
   })
 
   return(
-    <div className="guessContainer">
+    <div className="guess-container">
       {chars}
     </div>
   )

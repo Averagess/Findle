@@ -13,8 +13,8 @@ const InputGrid = ({ value, shouldAnimateShake }: Props) => {
   })
 
   const className = shouldAnimateShake
-    ? "inputContainer horizontal-shake"
-    : "inputContainer";
+    ? "input-container horizontal-shake"
+    : "input-container";
 
   return <div className={className}>{Boxes}</div>;
 };

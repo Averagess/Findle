@@ -9,7 +9,7 @@ interface Props {
 const CharContainer = ({ char, type, height, width, order }: Props) => {
   const element = order ? (
     <div
-      className="charContainer"
+      className="char-container"
       style={{
         height, width,
         animation: `0.5s reveal-${type} ${0.5 * order}s ease-in both`,
@@ -18,7 +18,7 @@ const CharContainer = ({ char, type, height, width, order }: Props) => {
       {char && <h1>{char}</h1>}
     </div>
   ) : (
-    <div style={{ height, width }} className={`charContainer ${type}`}>
+    <div style={{ height, width }} className={`char-container ${type}`}>
       {char ? <h1>{char}</h1> : <h1></h1>}
     </div>
   );
