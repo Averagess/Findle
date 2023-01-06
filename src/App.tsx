@@ -97,7 +97,7 @@ function App() {
   return (
     <div className="App" onKeyDown={(event) => handleKeyDown(event.key)} tabIndex={0}>
       <NavBar />
-      <div className="mainContainer">
+      <div className="main-container">
         {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
         {PastGuessElements}
         {PastGuessElements.length < 5 && <InputGrid value={input} shouldAnimateShake={shouldShake} />}

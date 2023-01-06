@@ -5,7 +5,7 @@ const EmptyGrid = () => {
     .fill(null)
     .map((_, index) => <CharContainer key={index} type="default" />);
 
-  return <div className="guessContainer">{EmptyElements}</div>;
+  return <div className="guess-container">{EmptyElements}</div>;
 };
 
 export default EmptyGrid;
