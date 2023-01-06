@@ -1,4 +1,5 @@
 import CharContainer from "./CharContainer";
+import EmptyGrid from "./EmptyGrid";
 
 
 interface Props {
@@ -7,17 +8,22 @@ interface Props {
 }
 
 const GuessGrid = ({ guessString, correctString }: Props) => {
+  if(!guessString) return(<EmptyGrid/>)
+  const chars = new Array(5).fill(null).map((_, index) => {
+    if(guessString[index] === correctString[index]) {
+      return (<CharContainer order={index+1} key={index} char={guessString[index]} type="correct" />)
+    } else if(correctString.includes(guessString[index])) {
+      return (<CharContainer order={index+1} key={index} char={guessString[index]} type="almost"  />)
+    } else if(guessString[index]) {
+      return <CharContainer order={index+1} key={index} char={guessString[index]} type="default" />
+    } else {
+      return <CharContainer order={index+1} key={index} type="default" />
+    }
+  })
+
   return(
     <div className="guessContainer">
-      {guessString.split("").map((char, index) => {
-        if(char === correctString[index]) {
-          return <CharContainer key={index} char={char} type="correct" />
-        } else if(correctString.includes(char)) {
-          return <CharContainer key={index} char={char} type="almost"  />
-        } else {
-          return <CharContainer key={index} char={char} type="default" />
-        }
-      })}
+      {chars}
     </div>
   )
 }

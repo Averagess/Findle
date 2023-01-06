@@ -752,7 +752,6 @@ const words = [
   "PELKO",
   "PELTI",
   "PELTO",
-  "PENIS",
   "PENSA",
   "PENTU",
   "PEONI",
