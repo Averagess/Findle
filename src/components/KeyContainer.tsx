@@ -13,8 +13,9 @@ const KeyContainer = ({ char, type, onClick }: Props) => {
       style={{
         height: "fit-content",
         width: char.length === 1 ? "24px" : "fit-content",
+        cursor: "pointer",
       }}
-      className={`charContainer ${type}`}
+      className={`charContainer to-${type}`}
     >
       <h1 style={{ fontSize: 14, margin: 10 }}>{char}</h1>
     </div>
