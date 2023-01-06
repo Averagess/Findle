@@ -10,6 +10,7 @@ import "./styles.css";
 import NavBar from "./components/NavBar";
 import Keyboard from "./components/Keyboard";
 import Footer from "./components/Footer";
+import allowedChars from "./assets/allowedChars";
 
 function App() {
   const [currentWord, setCurrentWord] = useState<string | null>(null);
@@ -17,6 +18,7 @@ function App() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [shouldShake, setShouldShake] = useState<boolean>(false)
 
   const setupGame = () => {
     const randomWord = words[Math.floor(Math.random() * words.length)];
@@ -24,7 +26,7 @@ function App() {
     setCurrentWord(randomWord);
     setInput("");
     setGuesses([]);
-    closeModal();
+    setModalOpen(false);
     setGameOver(false);
   };
 
@@ -32,36 +34,31 @@ function App() {
     setupGame();
   }, []);
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
-  const changeInput = (key: string) => {
-    if (key.length === 1 && input.length < 5 && !gameOver) {
-      setInput((old) => old + key.toUpperCase());
-    } else if (key.toUpperCase() === "BACK") {
-      setInput((old) => old.slice(0, old.length - 1));
-    } else if (key.toUpperCase() === "ENTER" && input.length === 5) {
-      setGuesses((old) => [...old, input]);
-      setInput("");
-    }
-  };
-
-
-
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    console.log(event.key);
-    if (event.key.length === 1 && input.length < 5 && !gameOver) {
-      setInput(input + event.key.toUpperCase());
-    } else if (event.key === "Backspace") {
-      setInput(input.slice(0, input.length - 1));
-    } else if (event.key === "Enter" && input.length === 5) {
-      setGuesses((old) => [...old, input]);
-      setInput("");
-    }
-  };
+  useEffect(() => {
+    if(shouldShake) setTimeout(() => setShouldShake(false), 500)
+  })
 
   if (!currentWord) return <h1>Loading word.....</h1>;
+
+
+  const handleKeyDown = (key: string) => {
+    const upperCaseKey = key.toUpperCase();
+
+    if (key.length === 1 && allowedChars.includes(upperCaseKey) && input.length < 5 && !gameOver) {
+      setInput(input + upperCaseKey);
+    } else if (upperCaseKey === "BACKSPACE" || upperCaseKey === "BACK") {
+      setInput(input.slice(0, input.length - 1));
+    } else if (upperCaseKey === "ENTER" && input.length === 5) {
+      if(!words.includes(input)) {
+        console.log(`input ${input} not in wordlist`)
+        setShouldShake(true)
+        return
+      }
+      setGuesses((old) => [...old, input]);
+      setInput("");
+    }
+  };
+
 
   const PastGuessElements = guesses.map((guess, index) => {
     return (
@@ -98,17 +95,17 @@ function App() {
 
 
   return (
-    <div className="App" onKeyDown={handleKeyDown} tabIndex={0}>
+    <div className="App" onKeyDown={(event) => handleKeyDown(event.key)} tabIndex={0}>
       <NavBar />
       <div className="mainContainer">
         {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
         {PastGuessElements}
-        {PastGuessElements.length < 5 && <InputGrid value={input} />}
+        {PastGuessElements.length < 5 && <InputGrid value={input} shouldAnimateShake={shouldShake} />}
         {EmptyGuessElements}
         <Keyboard
           correctString={currentWord}
           guesses={guesses}
-          changeInput={changeInput}
+          changeInput={handleKeyDown}
         />
         {gameOver && <button style={{marginTop: "15px"}} className="general-button" onClick={() => setModalOpen(true)}>show results</button>}
       </div>
@@ -116,7 +113,7 @@ function App() {
         <Popup
           correctWord={currentWord}
           guesses={guesses}
-          closeModal={closeModal}
+          closeModal={() => setModalOpen(false)}
           resetGame={setupGame}
         />
       )}
