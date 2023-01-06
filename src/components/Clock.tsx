@@ -11,10 +11,18 @@ const Clock = () => {
     return () => clearInterval(interval);
   }, []);
 
-
   return (
     <div className="clock-container">
-      <p style={{ color: "white", fontFamily: "sans-serif" }}>{time}</p>
+      <p
+        style={{
+          color: "white",
+          fontFamily: "sans-serif",
+          fontWeight: "bold",
+          userSelect: "none",
+        }}
+      >
+        {time}
+      </p>
     </div>
   );
 };
