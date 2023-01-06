@@ -2,10 +2,11 @@ import xIcon from "../assets/x.svg";
 
 interface Props {
   style: React.CSSProperties;
+  title: string;
   onClick: () => void;
 }
 
-const CloseButton = ({ style, onClick }: Props) => {
+const CloseButton = ({ style,title, onClick }: Props) => {
   return (
     <button
       style={{
@@ -15,6 +16,7 @@ const CloseButton = ({ style, onClick }: Props) => {
         padding: 0,
         ...style,
       }}
+      title={title}
       onClick={onClick}
     >
       <img
