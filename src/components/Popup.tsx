@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+
+import BackgroundBlur from "./BackgroundBlur";
 import CloseButton from "./CloseButton";
 import CopyBoardContainer from "./CopyBoardContainer";
 
@@ -63,48 +65,51 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
   };
 
   return (
-    <div className="popup-background">
-      <div className="popup-container rises-up">
-        {guesses[guesses.length - 1] === correctWord ? (
-          <h1>Nice one!</h1>
-        ) : (
-          <h1>Oh well!</h1>
-        )}
-        <CloseButton
-          style={{
-            position: "absolute",
-            top: 15,
-            right: 15,
-          }}
-          title="close"
-          onClick={closeModal}
-        />
-        <p>the correct word was: {correctWord} !</p>
-        {guesses[guesses.length - 1] === correctWord && (
-          <p>u got it right after {guesses.length} guesses!</p>
-        )}
-        {copyBoard.showBoard && (
+    <div className="popup-container rises-up">
+      {guesses[guesses.length - 1] === correctWord ? (
+        <h1>Nice one!</h1>
+      ) : (
+        <h1>Oh well!</h1>
+      )}
+      <CloseButton
+        style={{
+          position: "absolute",
+          top: 15,
+          right: 15,
+        }}
+        title="close"
+        onClick={closeModal}
+      />
+      <p>the correct word was: {correctWord} !</p>
+      {guesses[guesses.length - 1] === correctWord && (
+        <p>u got it right after {guesses.length} guesses!</p>
+      )}
+      {copyBoard.showBoard && (
+        <BackgroundBlur>
           <CopyBoardContainer
             board={copyBoard.boardText}
-            closeModal={() => setCopyBoard((old) => ({ ...old, showBoard: false }))}
-          />)}
+            closeModal={() =>
+              setCopyBoard((old) => ({ ...old, showBoard: false }))
+            }
+          />
+        </BackgroundBlur>
+      )}
 
-        <div style={{ display: "flex", gap: 25 }}>
-          <button className="general-button" onClick={resetGame}>
-            Play again
-          </button>
-          <button
-            className="general-button"
-            title="copy to clipboard"
-            onClick={boardToClipboard}
-            style={{
-              transition: "all 0.5s cubic-bezier(0.48, -0.27, 0.6, 1.15) 0s",
-              backgroundColor: copiedToClipboard ? "#43b648" : "",
-            }}
-          >
-            {copiedToClipboard ? "copied!" : "copy to clipboard"}
-          </button>
-        </div>
+      <div style={{ display: "flex", gap: 25 }}>
+        <button className="general-button" onClick={resetGame}>
+          Play again
+        </button>
+        <button
+          className="general-button"
+          title="copy to clipboard"
+          onClick={boardToClipboard}
+          style={{
+            transition: "all 0.5s cubic-bezier(0.48, -0.27, 0.6, 1.15) 0s",
+            backgroundColor: copiedToClipboard ? "#43b648" : "",
+          }}
+        >
+          {copiedToClipboard ? "copied!" : "copy to clipboard"}
+        </button>
       </div>
     </div>
   );
