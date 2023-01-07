@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+
+import BackgroundBlur from "./BackgroundBlur";
 import CloseButton from "./CloseButton";
+import CopyBoardContainer from "./CopyBoardContainer";
 
 interface Props {
   correctWord: string;
@@ -9,11 +12,16 @@ interface Props {
 }
 
 const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
-  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
+  const [copyBoard, setCopyBoard] = useState({
+    showBoard: false,
+    boardText: [""],
+  });
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        console.log("escape was pressed. closing modal");
+        console.log("escape was pressed. closing gameover modal");
         closeModal();
       }
     };
@@ -38,6 +46,7 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
       });
       return roundString.join("");
     });
+
     const resultStrings: string[] = [
       "Daily Findle",
       new Date(Date.now()).toLocaleDateString(),
@@ -45,79 +54,61 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
       ...boardString,
     ];
 
-    console.log(resultStrings.join("\n"));
-    navigator.clipboard
-      .writeText(resultStrings.join("\n"))
-      .then(() => {
-        // alert("Daily Findle copied to your clipboard!");
-        setCopiedToClipboard(true);
-        console.log("copied to clipboard");
-      })
-      .catch((err) => console.log("error copying to clipboard", err));
+    try {
+      navigator.clipboard.writeText(resultStrings.join("\n"));
+      setCopiedToClipboard(true);
+      console.log("copied to clipboard");
+    } catch (err) {
+      console.error("failed to copy to clipboard", err);
+      setCopyBoard({ showBoard: true, boardText: resultStrings });
+    }
   };
 
+  const playerWon = guesses[guesses.length - 1] === correctWord;
+  const PopupHeaderText = playerWon ? "Nice one!" : "Oh well!";
+
   return (
-    <div
-      style={{
-        height: "100%",
-        width: "100vw",
-        backgroundColor: "rgba(0,0,0,0.6)",
-        fontFamily: "Arial, Helvetica, sans-serif",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        top: 0,
-        zIndex: 1,
-      }}
-    >
-      <div
+    <div className="popup-container rises-up">
+      <h1 style={{margin: 0}}>{PopupHeaderText}</h1>
+      <CloseButton
         style={{
-          display: "flex",
-          flexDirection: "column",
-          color: "white",
-          backgroundColor: "rgb(25,45,40)",
-          alignItems: "center",
-          width: "40vw",
-          padding: "2.5vh",
-          borderRadius: 10,
-          position: "relative",
+          position: "absolute",
+          top: 15,
+          right: 15,
         }}
-      >
-        {guesses[guesses.length - 1] === correctWord ? (
-          <h1>Nice one!</h1>
-        ) : (
-          <h1>Oh well!</h1>
-        )}
-        <CloseButton
+        title="close"
+        onClick={closeModal}
+      />
+      <p>the correct word was: {correctWord} !</p>
+      {playerWon && (
+        <p>you got it right after {guesses.length} guesses!</p>
+      )}
+      {copyBoard.showBoard && (
+        <BackgroundBlur>
+          <CopyBoardContainer
+            board={copyBoard.boardText}
+            closeModal={() =>
+              setCopyBoard((old) => ({ ...old, showBoard: false }))
+            }
+          />
+        </BackgroundBlur>
+      )}
+
+      <div style={{ display: "flex", gap: 25 }}>
+        <button className="general-button" onClick={resetGame}>
+          Play again
+        </button>
+        <button
+          className="general-button"
+          title="copy to clipboard"
+          onClick={boardToClipboard}
           style={{
-            position: "absolute",
-            top: 15,
-            right: 15,
+            transition: "all 0.5s cubic-bezier(0.48, -0.27, 0.6, 1.15) 0s",
+            backgroundColor: copiedToClipboard ? "#43b648" : "",
           }}
-          title="close"
-          onClick={closeModal}
-        />
-        <p>the correct word was: {correctWord} !</p>
-        {guesses[guesses.length - 1] === correctWord && (
-          <p>u got it right after {guesses.length} guesses!</p>
-        )}
-        <div style={{ display: "flex", gap: 25 }}>
-          <button className="general-button" onClick={resetGame}>
-            Play again
-          </button>
-          <button
-            className="general-button"
-            title="copy to clipboard"
-            onClick={boardToClipboard}
-            style={{
-              transition: "all 0.5s cubic-bezier(0.48, -0.27, 0.6, 1.15) 0s",
-              backgroundColor: copiedToClipboard ? "#43b648" : "",
-            }}
-          >
-            {copiedToClipboard ? "copied!" : "copy to clipboard"}
-          </button>
-        </div>
+        >
+          {copiedToClipboard ? "copied!" : "copy to clipboard"}
+        </button>
       </div>
     </div>
   );
