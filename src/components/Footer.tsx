@@ -1,7 +1,8 @@
 import Clock from "./Clock";
+
 const Footer = () => {
   return (
-    <div className="footer-container">
+    <footer>
       <p
         style={{
           marginLeft: "10px",
@@ -12,7 +13,7 @@ const Footer = () => {
       >
         made by{" "}
         <a
-          style={{ color: "#0645AD", textDecoration: "none", fontWeight: "bold" }}
+          style={{ color: "#0645AD", fontWeight: "bold" }}
           href="https://github.com/Averagess"
           target="_blank"
         >
@@ -20,7 +21,7 @@ const Footer = () => {
         </a>
       </p>
       <Clock />
-    </div>
+    </footer>
   );
 };
 
