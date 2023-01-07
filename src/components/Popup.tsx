@@ -12,16 +12,16 @@ interface Props {
 }
 
 const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
+  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   const [copyBoard, setCopyBoard] = useState({
     showBoard: false,
     boardText: [""],
   });
 
-  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        console.log("escape was pressed. closing modal");
+        console.log("escape was pressed. closing gameover modal");
         closeModal();
       }
     };
@@ -64,13 +64,12 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
     }
   };
 
+  const playerWon = guesses[guesses.length - 1] === correctWord;
+  const PopupHeaderText = playerWon ? "Nice one!" : "Oh well!";
+
   return (
     <div className="popup-container rises-up">
-      {guesses[guesses.length - 1] === correctWord ? (
-        <h1>Nice one!</h1>
-      ) : (
-        <h1>Oh well!</h1>
-      )}
+      <h1 style={{margin: 0}}>{PopupHeaderText}</h1>
       <CloseButton
         style={{
           position: "absolute",
@@ -81,8 +80,8 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
         onClick={closeModal}
       />
       <p>the correct word was: {correctWord} !</p>
-      {guesses[guesses.length - 1] === correctWord && (
-        <p>u got it right after {guesses.length} guesses!</p>
+      {playerWon && (
+        <p>you got it right after {guesses.length} guesses!</p>
       )}
       {copyBoard.showBoard && (
         <BackgroundBlur>
