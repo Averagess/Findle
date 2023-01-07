@@ -21,7 +21,8 @@ const CopyBoardContainer = ({ board, closeModal }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "gray",
-          padding: "4.5vh"
+          padding: "4.5vh",
+          animation: "rises-up 0.2s ease-in-out",
         }}
       >
         <div>
