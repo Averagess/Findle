@@ -65,11 +65,7 @@ function App() {
     }
   };
 
-  const PastGuessElements = guesses.map((guess, index) => {
-    return (
-      <GuessGrid key={index} guessString={guess} correctString={currentWord} />
-    );
-  });
+  const PastGuessElements = guesses.map((guess, index) => <GuessGrid key={index} guessString={guess} correctString={currentWord} />);
 
   const EmptyGuessElements: JSX.Element[] =
     PastGuessElements.length < 5
