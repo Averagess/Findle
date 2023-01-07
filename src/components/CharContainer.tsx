@@ -1,9 +1,9 @@
 interface Props {
   char?: string;
-  type: "correct" | "almost" | "default";
   width?: number;
   height?: number;
   order?: number;
+  type: "correct" | "almost" | "default";
 }
 
 const CharContainer = ({ char, type, height, width, order }: Props) => {
