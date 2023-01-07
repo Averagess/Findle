@@ -4,13 +4,13 @@ import EmptyGrid from "./components/EmptyGrid";
 import GuessGrid from "./components/GuessGrid";
 import InputGrid from "./components/InputGrid";
 import Popup from "./components/Popup";
-
-import words from "./assets/words";
-import "./styles.css";
 import NavBar from "./components/NavBar";
 import Keyboard from "./components/Keyboard";
 import Footer from "./components/Footer";
+
+import words from "./assets/words";
 import allowedChars from "./assets/allowedChars";
+import "./styles.css";
 
 function App() {
   const [currentWord, setCurrentWord] = useState<string | null>(null);
@@ -22,7 +22,7 @@ function App() {
 
   const setupGame = () => {
     const randomWord = words[Math.floor(Math.random() * words.length)];
-    console.log("Random word set: " + randomWord);
+    console.log("Random word set to: " + randomWord);
     setCurrentWord(randomWord);
     setInput("");
     setGuesses([]);
@@ -45,15 +45,17 @@ function App() {
     const upperCaseKey = key.toUpperCase();
 
     if (key.length === 1 && allowedChars.includes(upperCaseKey) && input.length < 5 && !gameOver) {
-      setInput(input + upperCaseKey);
+      setInput(oldInput => oldInput + upperCaseKey);
     } else if (upperCaseKey === "BACKSPACE" || upperCaseKey === "BACK") {
-      setInput(input.slice(0, input.length - 1));
+      setInput(oldInput => oldInput.slice(0, oldInput.length - 1));
     } else if (upperCaseKey === "ENTER" && input.length === 5) {
+
       if(!words.includes(input)) {
         console.log(`input ${input} not in wordlist`)
         setShouldShake(true)
         return
       }
+
       setGuesses((old) => [...old, input]);
       setInput("");
     }
@@ -77,20 +79,11 @@ function App() {
           .map((_, index) => <EmptyGrid key={index} />)
       : [];
 
-  if (!gameOver && !modalOpen && PastGuessElements.length === 5) {
+  if (!gameOver && !modalOpen && (PastGuessElements.length === 5 || guesses[guesses.length - 1] === currentWord)) {
     setTimeout(() => {
       setModalOpen(true)
       setGameOver(true);
-    }, 3000);
-  } else if (
-    !gameOver &&
-    !modalOpen &&
-    guesses[guesses.length - 1] === currentWord
-  ) {
-    setTimeout(() => {
-      setModalOpen(true)
-      setGameOver(true);
-    }, 3000);
+    }, 3500);
   }
 
 
@@ -106,7 +99,7 @@ function App() {
           correctString={currentWord}
           guesses={guesses}
           changeInput={handleKeyDown}
-        />
+          />
         {gameOver && <button style={{marginTop: "15px"}} className="general-button" onClick={() => setModalOpen(true)}>show results</button>}
       </div>
       {modalOpen && (
