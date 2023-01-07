@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CloseButton from "./CloseButton";
+import CopyBoardContainer from "./CopyBoardContainer";
 
 interface Props {
   correctWord: string;
@@ -9,7 +10,12 @@ interface Props {
 }
 
 const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
-  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [copyBoard, setCopyBoard] = useState({
+    showBoard: false,
+    boardText: [""],
+  });
+
+  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -38,6 +44,7 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
       });
       return roundString.join("");
     });
+
     const resultStrings: string[] = [
       "Daily Findle",
       new Date(Date.now()).toLocaleDateString(),
@@ -45,45 +52,19 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
       ...boardString,
     ];
 
-    console.log(resultStrings.join("\n"));
-    navigator.clipboard
-      .writeText(resultStrings.join("\n"))
-      .then(() => {
-        // alert("Daily Findle copied to your clipboard!");
-        setCopiedToClipboard(true);
-        console.log("copied to clipboard");
-      })
-      .catch((err) => console.log("error copying to clipboard", err));
+    try {
+      navigator.clipboard.writeText(resultStrings.join("\n"));
+      setCopiedToClipboard(true);
+      console.log("copied to clipboard");
+    } catch (err) {
+      console.error("failed to copy to clipboard", err);
+      setCopyBoard({ showBoard: true, boardText: resultStrings });
+    }
   };
 
   return (
-    <div
-      style={{
-        height: "100%",
-        width: "100vw",
-        backgroundColor: "rgba(0,0,0,0.6)",
-        fontFamily: "Arial, Helvetica, sans-serif",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        top: 0,
-        zIndex: 1,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          color: "white",
-          backgroundColor: "rgb(25,45,40)",
-          alignItems: "center",
-          width: "40vw",
-          padding: "2.5vh",
-          borderRadius: 10,
-          position: "relative",
-        }}
-      >
+    <div className="popup-background">
+      <div className="popup-container rises-up">
         {guesses[guesses.length - 1] === correctWord ? (
           <h1>Nice one!</h1>
         ) : (
@@ -102,6 +83,12 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
         {guesses[guesses.length - 1] === correctWord && (
           <p>u got it right after {guesses.length} guesses!</p>
         )}
+        {copyBoard.showBoard && (
+          <CopyBoardContainer
+            board={copyBoard.boardText}
+            closeModal={() => setCopyBoard((old) => ({ ...old, showBoard: false }))}
+          />)}
+
         <div style={{ display: "flex", gap: 25 }}>
           <button className="general-button" onClick={resetGame}>
             Play again
