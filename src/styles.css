@@ -19,7 +19,9 @@ body,
   box-shadow: #747171 0px 0px 10px 2px;
   background-color: #1a1919;
   width: 100vw;
-  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 5vh;
 }
 
 .nav-header {
@@ -175,10 +177,16 @@ footer {
   color: white;
   background-color: rgb(25, 45, 40);
   align-items: center;
-  width: 40vw;
+  width: 60vw;
+  height: 60vh;
   padding: 4.5vh;
   border-radius: 10px;
   position: relative;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
 }
 
 @keyframes reveal-correct {
