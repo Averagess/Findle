@@ -1,7 +1,7 @@
 import xIcon from "../assets/x.svg";
 
 interface Props {
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   title: string;
   onClick: () => void;
 }
