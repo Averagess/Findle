@@ -1,10 +1,6 @@
-
-
 interface Props {
   children: React.ReactNode;
 }
-
-
 
 const BackgroundBlur = ({ children }: Props) => {
   return (
