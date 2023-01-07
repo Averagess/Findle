@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CloseButton from "./CloseButton";
 import GuessGrid from "./GuessGrid";
 
@@ -6,6 +7,22 @@ interface Props {
 }
 
 const TutorialPopup = ({ closePopup }: Props) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        console.log("Escape was pressed. closing tutorial popup")
+        closePopup();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+
+  }, [])
+
   return (
     <div style={{ alignItems: "normal" }} className="popup-container rises-up">
       <CloseButton
