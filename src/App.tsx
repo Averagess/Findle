@@ -12,6 +12,7 @@ import BackgroundBlur from "./components/BackgroundBlur";
 import words from "./assets/words";
 import allowedChars from "./assets/allowedChars";
 import "./styles.css";
+import TutorialPopup from "./components/TutorialPopup";
 
 function App() {
   const [currentWord, setCurrentWord] = useState<string | null>(null);
@@ -19,6 +20,7 @@ function App() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [showTutorial, setShowTutorial] = useState<boolean>(false);
   const [shouldShake, setShouldShake] = useState<boolean>(false);
 
   const setupGame = () => {
@@ -42,13 +44,13 @@ function App() {
   if (!currentWord) return <h1>Loading word.....</h1>;
 
   const handleKeyDown = (key: string) => {
+    if (showTutorial || gameOver) return;
     const upperCaseKey = key.toUpperCase();
 
     if (
       key.length === 1 &&
       allowedChars.includes(upperCaseKey) &&
-      input.length < 5 &&
-      !gameOver
+      input.length < 5
     ) {
       setInput((oldInput) => oldInput + upperCaseKey);
     } else if (upperCaseKey === "BACKSPACE" || upperCaseKey === "BACK") {
@@ -65,7 +67,9 @@ function App() {
     }
   };
 
-  const PastGuessElements = guesses.map((guess, index) => <GuessGrid key={index} guessString={guess} correctString={currentWord} />);
+  const PastGuessElements = guesses.map((guess, index) => (
+    <GuessGrid key={index} guessString={guess} correctString={currentWord} />
+  ));
 
   const EmptyGuessElements: JSX.Element[] =
     PastGuessElements.length < 5
@@ -92,7 +96,7 @@ function App() {
       onKeyDown={(event) => handleKeyDown(event.key)}
       tabIndex={0}
     >
-      <NavBar />
+      <NavBar toggleTutorial={() => setShowTutorial(true)} />
       <div className="main-container">
         {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
         {PastGuessElements}
@@ -115,6 +119,12 @@ function App() {
           </button>
         )}
       </div>
+      {showTutorial && (
+        <BackgroundBlur>
+          <TutorialPopup closePopup={() => setShowTutorial(false)} />
+        </BackgroundBlur>
+      )}
+
       {modalOpen && (
         <BackgroundBlur>
           <Popup
