@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import BackgroundBlur from "./BackgroundBlur";
 import CloseButton from "./CloseButton";

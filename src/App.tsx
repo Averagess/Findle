@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 
+import BackgroundBlur from "./components/BackgroundBlur";
 import EmptyGrid from "./components/EmptyGrid";
+import Footer from "./components/Footer";
 import GuessGrid from "./components/GuessGrid";
 import InputGrid from "./components/InputGrid";
-import Popup from "./components/Popup";
-import NavBar from "./components/NavBar";
 import Keyboard from "./components/Keyboard";
-import Footer from "./components/Footer";
-import BackgroundBlur from "./components/BackgroundBlur";
+import NavBar from "./components/NavBar";
+import Popup from "./components/Popup";
 
-import words from "./assets/words";
 import allowedChars from "./assets/allowedChars";
-import "./styles.css";
+import words from "./assets/words";
 import TutorialPopup from "./components/TutorialPopup";
+import "./styles.css";
 
 function App() {
   const [currentWord, setCurrentWord] = useState<string | null>(null);
@@ -39,7 +39,7 @@ function App() {
 
   useEffect(() => {
     if (shouldShake) setTimeout(() => setShouldShake(false), 500);
-  });
+  }, [shouldShake]);
 
   if (!currentWord) return <h1>Loading word.....</h1>;
 
