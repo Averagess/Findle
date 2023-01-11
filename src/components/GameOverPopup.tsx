@@ -11,7 +11,7 @@ interface Props {
   resetGame: () => void;
 }
 
-const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
+const GameOverPopup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
   const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   const [copyBoard, setCopyBoard] = useState({
     showBoard: false,
@@ -114,4 +114,4 @@ const Popup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
   );
 };
 
-export default Popup;
+export default GameOverPopup;
