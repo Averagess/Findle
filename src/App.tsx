@@ -7,6 +7,7 @@ import GuessGrid from "./components/GuessGrid";
 import InputGrid from "./components/InputGrid";
 import Keyboard from "./components/Keyboard";
 import NavBar from "./components/NavBar";
+import NotificationContainer from "./components/NotificationContainer";
 import Popup from "./components/Popup";
 
 import allowedChars from "./assets/allowedChars";
@@ -22,6 +23,7 @@ function App() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
   const [shouldShake, setShouldShake] = useState<boolean>(false);
+  const [notifications, setNotifications] = useState<string[]>([]);
 
   const setupGame = () => {
     const randomWord = words[Math.floor(Math.random() * words.length)];
@@ -43,9 +45,22 @@ function App() {
 
   if (!currentWord) return <h1>Loading word.....</h1>;
 
+  const addNotification = (notification: string) => {
+    if (notifications.length) return;
+    setNotifications((old) => [notification, ...old]);
+
+    setTimeout(() => {
+      setNotifications((old) => old.slice(0, old.length - 1));
+    }, 5000);
+  };
+
   const handleKeyDown = (key: string) => {
-    if (showTutorial || gameOver) return;
     const upperCaseKey = key.toUpperCase();
+
+    if (showTutorial || gameOver) return;
+    else if(!allowedChars.includes(upperCaseKey)) {
+      return setShouldShake(true)
+    };
 
     if (
       key.length === 1 &&
@@ -55,11 +70,13 @@ function App() {
       setInput((oldInput) => oldInput + upperCaseKey);
     } else if (upperCaseKey === "BACKSPACE" || upperCaseKey === "BACK") {
       setInput((oldInput) => oldInput.slice(0, oldInput.length - 1));
-    } else if (upperCaseKey === "ENTER" && input.length === 5) {
-      if (!words.includes(input)) {
-        console.log(`input ${input} not in wordlist`);
-        setShouldShake(true);
-        return;
+    } else if (upperCaseKey === "ENTER") {
+      if (input.length < 5) {
+        addNotification("Word must be 5 letters long");
+        return setShouldShake(true);
+      } else if (!words.includes(input)) {
+        addNotification("Word not in wordlist");
+        return setShouldShake(true);
       }
 
       setGuesses((old) => [...old, input]);
@@ -120,13 +137,13 @@ function App() {
         )}
       </div>
       {showTutorial && (
-        <BackgroundBlur>
+        <BackgroundBlur closePopup={() => setShowTutorial(false)}>
           <TutorialPopup closePopup={() => setShowTutorial(false)} />
         </BackgroundBlur>
       )}
 
       {modalOpen && (
-        <BackgroundBlur>
+        <BackgroundBlur closePopup={() => setModalOpen(false)}>
           <Popup
             correctWord={currentWord}
             guesses={guesses}
@@ -135,6 +152,7 @@ function App() {
           />
         </BackgroundBlur>
       )}
+      {notifications.length > 0 && <NotificationContainer notifications={notifications} />}
       <Footer />
     </div>
   );
