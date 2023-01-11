@@ -8,7 +8,7 @@ import InputGrid from "./components/InputGrid";
 import Keyboard from "./components/Keyboard";
 import NavBar from "./components/NavBar";
 import NotificationContainer from "./components/NotificationContainer";
-import Popup from "./components/Popup";
+import GameOverPopup from "./components/GameOverPopup";
 
 import allowedChars from "./assets/allowedChars";
 import words from "./assets/words";
@@ -35,14 +35,14 @@ const initialState: GameState = {
   showTutorialModal: false,
   shouldShakeInput: false,
   notifications: [],
-}
+};
 
 function App() {
-  const [gameState, setGameState] = useState<GameState>(initialState)
+  const [gameState, setGameState] = useState<GameState>(initialState);
 
   const resetGame = () => {
     const randomWord = words[Math.floor(Math.random() * words.length)];
-    setGameState({...initialState, currentWord: randomWord})
+    setGameState({ ...initialState, currentWord: randomWord });
     console.log("Random word set to: " + randomWord);
   };
 
@@ -51,41 +51,54 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (gameState.shouldShakeInput) setTimeout(() => setGameState(old => ({...old, shouldShakeInput: false})), 500);
+    if (gameState.shouldShakeInput) {
+      setTimeout(() => {
+        setGameState((old) => ({ ...old, shouldShakeInput: false }));
+      }, 500);
+    }
   }, [gameState.shouldShakeInput]);
 
   if (!gameState.currentWord) return <h1>Loading word.....</h1>;
 
   const addNotification = (notification: string) => {
     if (gameState.notifications.length) return;
-    setGameState(old => ({...old, notifications: [notification, ...gameState.notifications]}))
+    setGameState((old) => ({
+      ...old,
+      notifications: [notification, ...gameState.notifications],
+    }));
 
     setTimeout(() => {
-      setGameState(old => ({...old, notifications: old.notifications.slice(0, old.notifications.length - 1)}))
+      setGameState((old) => ({
+        ...old,
+        notifications: old.notifications.slice(0, old.notifications.length - 1),
+      }));
     }, 5000);
   };
 
   const toggleInputShakeOn = () => {
-    setGameState(old => ({...old, shouldShakeInput: true}))
-  }
+    setGameState((old) => ({ ...old, shouldShakeInput: true }));
+  };
 
   const handleKeyDown = (key: string) => {
     const upperCaseKey = key.toUpperCase();
-    const input = gameState.input
+    const input = gameState.input;
 
     if (gameState.showTutorialModal || gameState.gameOver) return;
-    else if(!allowedChars.includes(upperCaseKey)) {
+    else if (!allowedChars.includes(upperCaseKey)) {
       return toggleInputShakeOn();
-    };
+    }
 
     if (
       key.length === 1 &&
       allowedChars.includes(upperCaseKey) &&
       input.length < 5
     ) {
-      setGameState(old => ({...old, input: old.input + upperCaseKey}))
+      setGameState((old) => ({ ...old, input: old.input + upperCaseKey }));
     } else if (upperCaseKey === "BACKSPACE" || upperCaseKey === "BACK") {
-      setGameState(old => ({...old, input: old.input.slice(0, old.input.length - 1)}))
+      setGameState((old) => ({
+        ...old,
+        input: old.input.slice(0, old.input.length - 1),
+      }));
     } else if (upperCaseKey === "ENTER") {
       if (input.length < 5) {
         addNotification("Word must be 5 letters long");
@@ -95,12 +108,20 @@ function App() {
         return toggleInputShakeOn();
       }
 
-      setGameState(old => ({...old, guesses: [...old.guesses, input], input: ""}))
+      setGameState((old) => ({
+        ...old,
+        guesses: [...old.guesses, input],
+        input: "",
+      }));
     }
   };
 
   const PastGuessElements = gameState.guesses.map((guess, index) => (
-    <GuessGrid key={index} guessString={guess} correctString={gameState.currentWord as string} />
+    <GuessGrid
+      key={index}
+      guessString={guess}
+      correctString={gameState.currentWord as string}
+    />
   ));
 
   const EmptyGuessElements: JSX.Element[] =
@@ -117,17 +138,21 @@ function App() {
       gameState.guesses[gameState.guesses.length - 1] === gameState.currentWord)
   ) {
     setTimeout(() => {
-      setGameState(old => ({...old, showGameOverModal: true, gameOver: true}))
+      setGameState((old) => ({
+        ...old,
+        showGameOverModal: true,
+        gameOver: true,
+      }));
     }, 3500);
   }
 
   const setShowTutorial = (show: boolean) => {
-    setGameState(old => ({...old, showTutorialModal: show}))
-  }
+    setGameState((old) => ({ ...old, showTutorialModal: show }));
+  };
 
-  const setShowGameOver =  (show: boolean) => {
-    setGameState(old => ({...old, showGameOverModal: show}))
-  }
+  const setShowGameOver = (show: boolean) => {
+    setGameState((old) => ({ ...old, showGameOverModal: show }));
+  };
 
   return (
     <div
@@ -140,7 +165,10 @@ function App() {
         {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
         {PastGuessElements}
         {PastGuessElements.length < 5 && (
-          <InputGrid value={gameState.input} shouldAnimateShake={gameState.shouldShakeInput} />
+          <InputGrid
+            value={gameState.input}
+            shouldAnimateShake={gameState.shouldShakeInput}
+          />
         )}
         {EmptyGuessElements}
         <Keyboard
@@ -166,7 +194,7 @@ function App() {
 
       {gameState.showGameOverModal && (
         <BackgroundBlur closePopup={() => setShowGameOver(false)}>
-          <Popup
+          <GameOverPopup
             correctWord={gameState.currentWord}
             guesses={gameState.guesses}
             closeModal={() => setShowGameOver(false)}
@@ -174,7 +202,9 @@ function App() {
           />
         </BackgroundBlur>
       )}
-      {gameState.notifications.length > 0 && <NotificationContainer notifications={gameState.notifications} />}
+      {gameState.notifications.length > 0 && (
+        <NotificationContainer notifications={gameState.notifications} />
+      )}
       <Footer />
     </div>
   );
