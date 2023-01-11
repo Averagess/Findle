@@ -1,10 +1,12 @@
 interface Props {
+  closePopup?: () => void;
   children: React.ReactNode;
 }
 
-const BackgroundBlur = ({ children }: Props) => {
+const BackgroundBlur = ({ children, closePopup }: Props) => {
+  
   return (
-    <div className="bg-blur">
+    <div onClick={closePopup} className="bg-blur">
       {children}
     </div>
   );
