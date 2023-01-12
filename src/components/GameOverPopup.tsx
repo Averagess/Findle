@@ -11,7 +11,12 @@ interface Props {
   resetGame: () => void;
 }
 
-const GameOverPopup = ({ correctWord, guesses, closeModal, resetGame }: Props) => {
+const GameOverPopup = ({
+  correctWord,
+  guesses,
+  closeModal,
+  resetGame,
+}: Props) => {
   const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   const [copyBoard, setCopyBoard] = useState({
     showBoard: false,
@@ -69,7 +74,7 @@ const GameOverPopup = ({ correctWord, guesses, closeModal, resetGame }: Props) =
 
   return (
     <div className="popup-container rises-up">
-      <h1 style={{margin: 0}}>{PopupHeaderText}</h1>
+      <h1 style={{ margin: 0 }}>{PopupHeaderText}</h1>
       <CloseButton
         style={{
           position: "absolute",
@@ -80,9 +85,7 @@ const GameOverPopup = ({ correctWord, guesses, closeModal, resetGame }: Props) =
         onClick={closeModal}
       />
       <p>the correct word was: {correctWord} !</p>
-      {playerWon && (
-        <p>you got it right after {guesses.length} guesses!</p>
-      )}
+      {playerWon && <p>you got it right after {guesses.length} guesses!</p>}
       {copyBoard.showBoard && (
         <BackgroundBlur>
           <CopyBoardContainer

@@ -7,12 +7,7 @@ const NotificationContainer = ({ notifications }: Props) => {
     <div className="notification-container">
       {notifications.map((notification, index) => {
         return (
-          <div
-            key={index}
-            className={
-              "notification"
-            }
-          >
+          <div key={index} className={"notification"}>
             {notification}
           </div>
         );

@@ -15,7 +15,6 @@ const ImageButton = ({
   width,
   title,
 }: Props) => {
-  
   return (
     <button
       onClick={onClick}

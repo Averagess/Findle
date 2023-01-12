@@ -10,7 +10,7 @@ const TutorialPopup = ({ closePopup }: Props) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        console.log("Escape was pressed. closing tutorial popup")
+        console.log("Escape was pressed. closing tutorial popup");
         closePopup();
       }
     };
@@ -20,8 +20,7 @@ const TutorialPopup = ({ closePopup }: Props) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-
-  }, [])
+  }, []);
 
   return (
     <div style={{ alignItems: "normal" }} className="popup-container rises-up">

@@ -11,7 +11,8 @@ const CharContainer = ({ char, type, height, width, order }: Props) => {
     <div
       className="char-container"
       style={{
-        height, width,
+        height,
+        width,
         animation: `0.5s reveal-${type} ${0.5 * order}s ease-in both`,
       }}
     >

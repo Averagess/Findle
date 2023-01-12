@@ -53,15 +53,9 @@ const Keyboard = ({ guesses, correctString, changeInput }: Props) => {
         );
       } else if (wrongChars.includes(key)) {
         return (
-          <KeyContainer
-            key={index}
-            char={key}
-            type="wrong"
-            onClick={onClick}
-          />
+          <KeyContainer key={index} char={key} type="wrong" onClick={onClick} />
         );
-      }
-      else
+      } else
         return (
           <KeyContainer
             key={index}
@@ -94,14 +88,9 @@ const Keyboard = ({ guesses, correctString, changeInput }: Props) => {
         );
       } else if (wrongChars.includes(key)) {
         return (
-          <KeyContainer
-            key={index}
-            char={key}
-            type="wrong"
-            onClick={onClick}
-          />
+          <KeyContainer key={index} char={key} type="wrong" onClick={onClick} />
         );
-      }else
+      } else
         return (
           <KeyContainer
             key={index}
@@ -134,14 +123,9 @@ const Keyboard = ({ guesses, correctString, changeInput }: Props) => {
         );
       } else if (wrongChars.includes(key)) {
         return (
-          <KeyContainer
-            key={index}
-            char={key}
-            type="wrong"
-            onClick={onClick}
-          />
+          <KeyContainer key={index} char={key} type="wrong" onClick={onClick} />
         );
-      }else
+      } else
         return (
           <KeyContainer
             key={index}

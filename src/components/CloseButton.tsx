@@ -6,7 +6,7 @@ interface Props {
   onClick: () => void;
 }
 
-const CloseButton = ({ style,title, onClick }: Props) => {
+const CloseButton = ({ style, title, onClick }: Props) => {
   return (
     <button
       style={{
