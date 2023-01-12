@@ -14,6 +14,7 @@ import allowedChars from "./assets/allowedChars";
 import words from "./assets/words";
 import TutorialPopup from "./components/TutorialPopup";
 import "./styles.css";
+import GameoverButtons from "./components/GameoverButtons";
 
 interface GameState {
   currentWord: string | null;
@@ -176,13 +177,7 @@ function App() {
           changeInput={handleKeyDown}
         />
         {gameState.gameOver && (
-          <button
-            style={{ marginTop: "15px" }}
-            className="general-button"
-            onClick={() => setShowGameOver(true)}
-          >
-            show results
-          </button>
+          <GameoverButtons resetGame={resetGame} setShowGameOver={setShowGameOver} />
         )}
       </div>
       {gameState.showTutorialModal && (
