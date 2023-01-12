@@ -162,7 +162,7 @@ function App() {
     >
       <NavBar toggleTutorial={() => setShowTutorial(true)} />
       <div className="main-container">
-        {/* <h1 style={{ color: "white", fontSize: "24px" }}>[ {currentWord} ]</h1> */}
+        <h1 style={{ color: "white", fontSize: "24px" }}>[ {gameState.currentWord} ]</h1>
         {PastGuessElements}
         {PastGuessElements.length < 5 && (
           <InputGrid
