@@ -17,4 +17,5 @@ const BackgroundBlur = ({ children, closePopup }: Props) => {
   );
 };
 
+
 export default BackgroundBlur;
