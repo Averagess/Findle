@@ -3074,7 +3074,7 @@ const words: string[] = [
   "ÖINEN",
   "ÖISIN",
   "ÖLINÄ",
-  "ÖRINÄ"
-]
+  "ÖRINÄ",
+];
 
 export default words;

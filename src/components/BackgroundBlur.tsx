@@ -4,13 +4,12 @@ interface Props {
 }
 
 const BackgroundBlur = ({ children, closePopup }: Props) => {
-
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if(event.target === event.currentTarget && closePopup) {
+    if (event.target === event.currentTarget && closePopup) {
       closePopup();
     }
-  }
-  
+  };
+
   return (
     <div onClick={handleClick} className="bg-blur">
       {children}
