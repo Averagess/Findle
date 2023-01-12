@@ -24,24 +24,7 @@ jobs:
 
     - name: Build project
       run: npm run build
-    
-  bumpVersionAndDeploy:
-    if: |
-      github.event_name == 'push' &&
-      !contains(github.event.head_commit.message, '#skip')
-    needs: [build]
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-        fetch-depth: '0'
-
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.36.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
+      
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
