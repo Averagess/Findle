@@ -23,7 +23,6 @@ const CharContainer = ({ char, type, height, width, order }: Props) => {
       {char ? <h1>{char}</h1> : <h1></h1>}
     </div>
   );
-
   return element;
 };
 
